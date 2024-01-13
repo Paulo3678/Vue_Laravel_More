@@ -6,7 +6,8 @@ import useToastr from '../../toastr';
 const toastr = useToastr();
 const props = defineProps({
     user: Object,
-    index: Number
+    index: Number,
+    selectAll: Boolean
 });
 
 const userIdBeingDeleted = ref(null);
@@ -51,7 +52,7 @@ const toggleSelection = () => {
 <template>
     <tr>
         <th>
-            <input type="checkbox" @change="toggleSelection">
+            <input type="checkbox" :checked="selectAll" @change="toggleSelection">
         </th>
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>

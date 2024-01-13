@@ -110,8 +110,17 @@ const bulkDelete = () => {
     }).then(response => {
         users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
         selectedUsers.value = [];
+        selectAll.value = false;
         toastr.success(response.data.message)
     });
+}
+const selectAll = ref(false);
+const selectAllUsers = () => {
+    if (selectAll.value) {
+        selectedUsers.value = users.value.data.map(user => user.id);
+    } else {
+        selectedUsers.value = [];
+    }
 }
 
 watch(searchQuery, debounce(() => {
@@ -177,7 +186,7 @@ const editUserSchema = yup.object({
                         <thead>
                             <tr>
                                 <th>
-                                    <input type="checkbox">
+                                    <input type="checkbox" @change="selectAllUsers" v-model="selectAll">
                                 </th>
                                 <th style="width: 10px;">#</th>
                                 <th>Name</th>
@@ -189,7 +198,8 @@ const editUserSchema = yup.object({
                         </thead>
                         <tbody v-if="users.data.length > 0">
                             <UserListItem v-for="(user, index) in users.data" :key="user.id" :user="user" :index="index"
-                                @user-deleted="userDeleted" @edit-user="editUser" @toggle-selection="toggleSelection" />
+                                @user-deleted="userDeleted" @edit-user="editUser" @toggle-selection="toggleSelection"
+                                :select-all="selectAll" />
                         </tbody>
                         <tbody v-else>
                             <tr>
