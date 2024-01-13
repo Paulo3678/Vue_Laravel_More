@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import useToastr from '../../toastr';
+import {formatDate} from '../../helper.js';
 
 const toastr = useToastr();
 // ref([]) faz com que a variavel seja reativa
@@ -125,7 +126,6 @@ onMounted(() => {
         </div>
     </div>
 
-
     <div class="content">
         <div class="container-fluid">
             <button @click.prevent="addUser" type="button" class="mb-2 btn btn-primary">
@@ -149,7 +149,7 @@ onMounted(() => {
                                 <td>{{ user.id }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>-</td>
+                                <td>{{ formatDate(user.created_at) }}</td>
                                 <td>-</td>
                                 <td>
                                     <a href="#" @click.prevent="editUser(user)">
@@ -166,7 +166,6 @@ onMounted(() => {
             </div>
         </div>
     </div>
-
 
     <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" role="dialog"
         aria-labelledby="userFormModalLabel" aria-hidden="true">

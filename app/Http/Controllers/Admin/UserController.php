@@ -10,7 +10,15 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::get();
+        // $users = User::latest()->get()->map(function ($user) {
+        //     return [
+        //         'id' => $user->id,
+        //         'name' => $user->name,
+        //         'email' => $user->email,
+        //         'created_at' => $user->created_at->format(config('app.date_format')),
+        //     ];
+        // });
+        $users = User::latest()->get();
 
         return $users;
     }
