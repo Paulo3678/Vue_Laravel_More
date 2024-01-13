@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,9 @@ Route::post('/api/users', [UserController::class, 'store']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
 Route::delete('/api/users', [UserController::class, 'bulkDelete']);
-Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
 Route::patch('/api/users/{user}/chage-role', [UserController::class, 'changeRole']);
+
+Route::get('/api/appointments', [AppointmentController::class, 'index']);
+
+
+Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
