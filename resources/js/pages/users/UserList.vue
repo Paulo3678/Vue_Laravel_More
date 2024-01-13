@@ -37,6 +37,8 @@ const getUsers = (page = 1) => {
     axios.get(`/api/users?page=${page}`)
         .then((response) => {
             users.value = response.data;
+            selectedUsers.value = [];
+            selectAll.value = false;
         });
 }
 const addUser = () => {
@@ -169,12 +171,15 @@ const editUserSchema = yup.object({
             <div class="d-flex justify-content-between">
                 <div>
                     <button @click.prevent="addUser" type="button" class="mb-2 btn btn-primary">
+                        <i class="fa fa-plus-circle mr-1"></i>
                         Add New User
                     </button>
                     <button v-if="selectedUsers.length > 0" @click.prevent="bulkDelete" type="button"
                         class="mb-2 ml-2 btn btn-danger">
+                        <i class="fa fa-trash mr-1"></i>
                         Delete Selected
                     </button>
+                    <span class="ml-2" v-if="selectedUsers.length > 0">Selected {{ selectedUsers.length }} users</span>
                 </div>
                 <div>
                     <input type="text" v-model="searchQuery" class="form-control" placeholder="Search...">
