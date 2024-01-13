@@ -18,7 +18,7 @@ class UserController extends Controller
         //         'created_at' => $user->created_at->format(config('app.date_format')),
         //     ];
         // });
-        $users = User::latest()->get();
+        $users = User::latest()->paginate();
 
         return $users;
     }
@@ -66,7 +66,7 @@ class UserController extends Controller
     {
         $searchQuery = request('query');
 
-        $users = User::where('name', 'like', "%{$searchQuery}%")->get();
+        $users = User::where('name', 'like', "%{$searchQuery}%")->paginate();
         return response()->json($users);
     }
 }

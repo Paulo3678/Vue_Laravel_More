@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
 import useToastr from '../../toastr';
@@ -8,7 +9,7 @@ import { debounce } from 'lodash';
 
 const toastr = useToastr();
 // ref([]) faz com que a variavel seja reativa
-const users = ref([]);
+const users = ref({ 'data': [] });
 const editing = ref(false);
 const formValues = ref({
     id: '',
@@ -32,8 +33,8 @@ const createUser = (values, { resetForm, setErrors }) => {
             }
         });
 }
-const getUsers = () => {
-    axios.get('/api/users')
+const getUsers = (page = 1) => {
+    axios.get(`/api/users?page=${page}`)
         .then((response) => {
             users.value = response.data;
         });
@@ -156,8 +157,8 @@ const editUserSchema = yup.object({
                                 <th>Options</th>
                             </tr>
                         </thead>
-                        <tbody v-if="users.length > 0">
-                            <UserListItem v-for="(user, index) in users" :key="user.id" :user="user" :index="index"
+                        <tbody v-if="users.data.length > 0">
+                            <UserListItem v-for="(user, index) in users.data" :key="user.id" :user="user" :index="index"
                                 @user-deleted="userDeleted" @edit-user="editUser" />
                         </tbody>
                         <tbody v-else>
@@ -168,6 +169,7 @@ const editUserSchema = yup.object({
                     </table>
                 </div>
             </div>
+            <Bootstrap4Pagination :data="users" @pagination-change-page="getUsers" />
         </div>
     </div>
 
