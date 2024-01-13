@@ -18,16 +18,16 @@ const formValues = ref({
 });
 const form = ref(null);
 
-
 const createUser = (values, { resetForm, setErrors }) => {
     axios.post('/api/users', values)
         .then((response) => {
             // users.value.unshift(response.data) -> Para colocar em primeiro
-            users.value.push(response.data)
+            users.value.data.push(response.data)
             $('#userFormModal').modal('hide');
             resetForm();
             toastr.success('User created successfully!');
         }).catch(error => {
+            console.log(error);
             if (error.response.data.errors) {
                 setErrors(error.response.data.errors);
             }
@@ -92,6 +92,27 @@ const search = () => {
         console.log(error);
     });
 }
+const selectedUsers = ref([]);
+const toggleSelection = (user) => {
+    const index = selectedUsers.value.indexOf(user.id);
+    if (index === -1) {
+        selectedUsers.value.push(user.id);
+    } else {
+        selectedUsers.value.splice(index, 1);
+    }
+    console.log(selectedUsers.value);
+}
+const bulkDelete = () => {
+    axios.delete('/api/users', {
+        data: {
+            ids: selectedUsers.value
+        }
+    }).then(response => {
+        users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
+        selectedUsers.value = [];
+        toastr.success(response.data.message)
+    });
+}
 
 watch(searchQuery, debounce(() => {
     search();
@@ -137,9 +158,15 @@ const editUserSchema = yup.object({
     <div class="content">
         <div class="container-fluid">
             <div class="d-flex justify-content-between">
-                <button @click.prevent="addUser" type="button" class="mb-2 btn btn-primary">
-                    Add New User
-                </button>
+                <div>
+                    <button @click.prevent="addUser" type="button" class="mb-2 btn btn-primary">
+                        Add New User
+                    </button>
+                    <button v-if="selectedUsers.length > 0" @click.prevent="bulkDelete" type="button"
+                        class="mb-2 ml-2 btn btn-danger">
+                        Delete Selected
+                    </button>
+                </div>
                 <div>
                     <input type="text" v-model="searchQuery" class="form-control" placeholder="Search...">
                 </div>
@@ -149,6 +176,9 @@ const editUserSchema = yup.object({
                     <table class="table table-bordered">
                         <thead>
                             <tr>
+                                <th>
+                                    <input type="checkbox">
+                                </th>
                                 <th style="width: 10px;">#</th>
                                 <th>Name</th>
                                 <th>Email</th>
@@ -159,7 +189,7 @@ const editUserSchema = yup.object({
                         </thead>
                         <tbody v-if="users.data.length > 0">
                             <UserListItem v-for="(user, index) in users.data" :key="user.id" :user="user" :index="index"
-                                @user-deleted="userDeleted" @edit-user="editUser" />
+                                @user-deleted="userDeleted" @edit-user="editUser" @toggle-selection="toggleSelection" />
                         </tbody>
                         <tbody v-else>
                             <tr>

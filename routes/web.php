@@ -27,5 +27,6 @@ Route::get('/api/users/serach', [UserController::class, 'search']);
 Route::post('/api/users', [UserController::class, 'store']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
+Route::delete('/api/users', [UserController::class, 'bulkDelete']);
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
 Route::patch('/api/users/{user}/chage-role', [UserController::class, 'changeRole']);

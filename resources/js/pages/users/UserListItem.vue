@@ -4,13 +4,13 @@ import { ref, onMounted } from 'vue';
 import useToastr from '../../toastr';
 
 const toastr = useToastr();
-defineProps({
+const props = defineProps({
     user: Object,
     index: Number
 });
 
 const userIdBeingDeleted = ref(null);
-const emit = defineEmits(['userDeleted', 'editUser']);
+const emit = defineEmits(['userDeleted', 'editUser', 'toggleSelection']);
 
 const confirmUserDeletion = (user) => {
     userIdBeingDeleted.value = user.id;
@@ -42,18 +42,25 @@ const roles = ref([
         value: 2
     },
 ]);
+const toggleSelection = () => {
+    emit('toggleSelection', props.user)
+}
 
 </script>
 
 <template>
     <tr>
+        <th>
+            <input type="checkbox" @change="toggleSelection">
+        </th>
         <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ formatDate(user.created_at) }}</td>
         <td>
             <select name="" id="" class="form-control" @change="changeRole(user, $event.target.value)">
-                <option v-for="(role, index) in roles" :selected="(user.role === role.name)" :value="role.value" :key="index">
+                <option v-for="(role, index) in roles" :selected="(user.role === role.name)" :value="role.value"
+                    :key="index">
                     {{ role.name }}
                 </option>
             </select>
