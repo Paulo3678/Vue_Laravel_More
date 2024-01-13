@@ -2,7 +2,9 @@
 import { ref, reactive, onMounted } from 'vue';
 import { Form, Field } from 'vee-validate';
 import * as yup from 'yup';
+import useToastr from '../../toastr';
 
+const toastr = useToastr();
 // ref([]) faz com que a variavel seja reativa
 const users = ref([]);
 const editing = ref(false);
@@ -20,6 +22,7 @@ const createUser = (values, { resetForm, setErrors }) => {
             users.value.push(response.data)
             $('#userFormModal').modal('hide');
             resetForm();
+            toastr.success('User created successfully!');
         }).catch(error => {
             if (error.response.data.errors) {
                 setErrors(error.response.data.errors);
@@ -49,12 +52,13 @@ const editUser = (user) => {
     };
 
 }
-const updateUser = (values, {setErrors}) => {
+const updateUser = (values, { setErrors }) => {
     axios.put('/api/users/' + formValues.value.id, values)
         .then((response) => {
             const index = users.value.findIndex(user => user.id === response.data.id);
             users.value[index] = response.data;
             $("#userFormModal").modal('hide');
+            toastr.success('User updated successfully!');
         }).catch((error) => {
             console.log(error.response.data.errors);
             if (error.response.data.errors) {
