@@ -10,17 +10,12 @@ defineProps({
 });
 
 const userIdBeingDeleted = ref(null);
-const editing = ref(false);
 const emit = defineEmits(['userDeleted', 'editUser']);
 
 const confirmUserDeletion = (user) => {
     userIdBeingDeleted.value = user.id;
     $('#deleteUserModal').modal('show');
 }
-const editUser = (user) => {
-    emit('editUser', user)
-}
-
 const deleteUser = (id) => {
     axios.delete(`/api/users/${userIdBeingDeleted.value}`)
         .then(() => {
@@ -41,7 +36,7 @@ const deleteUser = (id) => {
         <td>{{ formatDate(user.created_at) }}</td>
         <td>{{ user.role }}</td>
         <td>
-            <a href="#" @click.prevent="editUser(user)">
+            <a href="#" @click.prevent="$emit('editUser', user)">
                 <i class="fa fa-edit"></i>
             </a>
             <a href="#" @click.prevent="confirmUserDeletion(user)">
