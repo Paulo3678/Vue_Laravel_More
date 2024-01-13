@@ -24,7 +24,24 @@ const deleteUser = (id) => {
             emit('userDeleted', userIdBeingDeleted.value);
         });
 }
+const changeRole = (user, role) => {
+    axios.patch(`/api/users/${user.id}/chage-role`, {
+        role: role
+    }).then(() => {
+        toastr.success('Role changed successfully!');
+    });
+}
 
+const roles = ref([
+    {
+        name: 'ADMIN',
+        value: 1
+    },
+    {
+        name: 'USER',
+        value: 2
+    },
+]);
 
 </script>
 
@@ -34,7 +51,14 @@ const deleteUser = (id) => {
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ formatDate(user.created_at) }}</td>
-        <td>{{ user.role }}</td>
+        <td>
+            <select name="" id="" class="form-control" @change="changeRole(user, $event.target.value)">
+                <option v-for="(role, index) in roles" :selected="(user.role === role.name)" :value="role.value" :key="index">
+                    {{ role.name }}
+                </option>
+            </select>
+
+        </td>
         <td>
             <a href="#" @click.prevent="$emit('editUser', user)">
                 <i class="fa fa-edit"></i>

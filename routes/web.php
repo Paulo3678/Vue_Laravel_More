@@ -27,3 +27,4 @@ Route::post('/api/users', [UserController::class, 'store']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');
+Route::patch('/api/users/{user}/chage-role', [UserController::class, 'changeRole']);
