@@ -34,6 +34,6 @@ Route::patch('/api/users/{user}/chage-role', [UserController::class, 'changeRole
 
 Route::get('/api/appointments', [AppointmentController::class, 'index']);
 Route::get('/api/appointment-status', [AppointmentStatusController::class, 'getStatusWithCount']);
-
+Route::post('/api/appointments/create', [AppointmentController::class, 'store']);
 
 Route::get('{view}', ApplicationController::class)->where('view', '(.*)');

@@ -13,9 +13,9 @@ class Appointment extends Model
     protected $casts = [
         'start_time' => 'datetime',
         'end_time' => 'datetime',
-        'status'=> AppointmentStatus::class
+        'status' => AppointmentStatus::class
     ];
-
+    protected $guarded = [];
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
