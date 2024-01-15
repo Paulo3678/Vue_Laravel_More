@@ -189,7 +189,8 @@
                         </li>
                         <li class="nav-item">
                             <router-link to="/admin/appointments"
-                                :class="$route.path.startsWith('/admin/appointments') ? 'active' : ''" class="nav-link">
+                                :class="$route.path.startsWith('/admin/appointments') ? 'active' : ''"
+                                class="nav-link">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
                                 <p>
                                     Appointments
@@ -222,12 +223,17 @@
                         </li>
 
                         <li class="nav-item">
-                            <router-link to="/admin/logout" active-class="active" class="nav-link">
-                                <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>
-                                    Logout
-                                </p>
-                            </router-link>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a to="/admin/logout" onclick="event.preventDefault(); this.closest('form').submit();"
+                                    class="nav-link">
+                                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                                    <p>
+                                        Logout
+                                    </p>
+                                </a>
+
+                            </form>
                         </li>
 
                     </ul>
